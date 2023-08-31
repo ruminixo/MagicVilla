@@ -1,10 +1,11 @@
 
 
+using MagicVilla_API;
 using MagicVilla_API.Datos;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
-
+builder.Services.AddAutoMapper(typeof(MappingConfig));
 // Add services to the container.
 
 builder.Services.AddControllers().AddNewtonsoftJson();
