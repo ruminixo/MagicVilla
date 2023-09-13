@@ -1,0 +1,81 @@
+﻿using MagicVilla_API.Modelos;
+using MagicVilla_Utilidad;
+using MagicVilla_Web.Models;
+using MagicVilla_Web.Services.IServices;
+using Newtonsoft.Json;
+using System.Net;
+using System.Text;
+
+namespace MagicVilla_Web.Services
+{
+    public class BaseService : IBaseService
+    {
+        public APIResponse responseModel { get ; set ; }
+        public IHttpClientFactory _httpClient { get; set; }
+
+        public BaseService(IHttpClientFactory httpClient)
+        { 
+            this.responseModel = new ();
+            _httpClient = httpClient;
+        }    
+        public async Task<T> SendAsync<T>(APIRequrest apiRequest)
+        {
+            try
+            {
+                var Client = _httpClient.CreateClient("MagicAPI");
+                HttpRequestMessage message = new HttpRequestMessage();
+                message.Headers.Add("Accept", "application/json");
+                message.RequestUri= new Uri(apiRequest.Url);
+                if (apiRequest.Datos!=null)
+                {
+                    message.Content = new StringContent(JsonConvert.SerializeObject(apiRequest.Datos), Encoding.UTF8,"Application/json");
+                }
+                switch (apiRequest.APITipo)
+                {
+                    case DS.APITipo.POST : message.Method = HttpMethod.Post; break;
+                    case DS.APITipo.PUT : message.Method = HttpMethod.Put; break;
+                    case DS.APITipo.DELETE : message.Method = HttpMethod.Delete; break;                                
+                    default: message.Method = HttpMethod.Get; break;
+                }
+                HttpResponseMessage apiResponse = null;
+                apiResponse = await Client.SendAsync(message);  
+                var apiContent= await apiResponse.Content.ReadAsStringAsync();
+                
+                try
+                {
+                    APIResponse response =JsonConvert.DeserializeObject<APIResponse>(apiContent);
+                        
+                    if (apiResponse.StatusCode == HttpStatusCode.BadRequest || apiResponse.StatusCode==HttpStatusCode.NotFound)
+                    {
+                        response.StatusCode = HttpStatusCode.BadRequest;
+                        response.IsExistoso=false;
+                        var res=JsonConvert.SerializeObject(response);
+                        var obj =JsonConvert.DeserializeObject<T>(res);
+                        return obj; 
+                    }
+                   
+                }
+                catch (Exception ex)
+                {
+                    var errorResponse= JsonConvert.DeserializeObject<T> (apiContent);
+                    return errorResponse;
+                }
+
+                var APIResponse = JsonConvert.DeserializeObject<T>(apiContent);
+                return APIResponse;
+            }
+            catch (Exception ex)
+            {
+                var dto = new APIResponse
+                {
+                    ErrorMessages = new List<string> { Convert.ToString(ex.Message) },
+                    IsExistoso = false
+                };
+                var res =JsonConvert.SerializeObject(dto);
+                var responseEx = JsonConvert.DeserializeObject<T>(res);
+                return responseEx;
+            }
+            
+        }
+    }
+}

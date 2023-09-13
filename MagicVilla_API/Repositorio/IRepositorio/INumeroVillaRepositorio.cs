@@ -2,8 +2,8 @@
 
 namespace MagicVilla_API.Repositorio.IRepositorio
 {
-    public interface INumeroVillaRepositorio : IRepositorio<Numerovilla>
+    public interface INumeroVillaRepositorio : IRepositorio<NumeroVilla>
     {
-        Task<Numerovilla> Actualizar(Numerovilla entidad);
+        Task<NumeroVilla> Actualizar(NumeroVilla entidad);
     }
 }
