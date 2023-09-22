@@ -6,7 +6,10 @@ using System.Net;
 
 namespace MagicVilla_API.Controllers
 {
-    public class UsuarioController : Controller
+    [Route("api/[controller]")]
+    [ApiController]
+
+    public class UsuarioController : ControllerBase
     {
         private readonly IUsuarioRepositorio _usuarioRepo;
         private APIResponse _response ;

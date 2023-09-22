@@ -10,6 +10,7 @@ C:\SVD\MagicVilla_API\MagicVilla\MagicVilla_API\bin\Debug\net7.0\AutoMapper.Exte
 C:\SVD\MagicVilla_API\MagicVilla\MagicVilla_API\bin\Debug\net7.0\Azure.Core.dll
 C:\SVD\MagicVilla_API\MagicVilla\MagicVilla_API\bin\Debug\net7.0\Azure.Identity.dll
 C:\SVD\MagicVilla_API\MagicVilla\MagicVilla_API\bin\Debug\net7.0\Humanizer.dll
+C:\SVD\MagicVilla_API\MagicVilla\MagicVilla_API\bin\Debug\net7.0\Microsoft.AspNetCore.Authentication.JwtBearer.dll
 C:\SVD\MagicVilla_API\MagicVilla\MagicVilla_API\bin\Debug\net7.0\Microsoft.AspNetCore.JsonPatch.dll
 C:\SVD\MagicVilla_API\MagicVilla\MagicVilla_API\bin\Debug\net7.0\Microsoft.AspNetCore.Mvc.NewtonsoftJson.dll
 C:\SVD\MagicVilla_API\MagicVilla\MagicVilla_API\bin\Debug\net7.0\Microsoft.AspNetCore.OpenApi.dll
@@ -80,4 +81,3 @@ C:\SVD\MagicVilla_API\MagicVilla\MagicVilla_API\obj\Debug\net7.0\refint\MagicVil
 C:\SVD\MagicVilla_API\MagicVilla\MagicVilla_API\obj\Debug\net7.0\MagicVilla_API.pdb
 C:\SVD\MagicVilla_API\MagicVilla\MagicVilla_API\obj\Debug\net7.0\MagicVilla_API.genruntimeconfig.cache
 C:\SVD\MagicVilla_API\MagicVilla\MagicVilla_API\obj\Debug\net7.0\ref\MagicVilla_API.dll
-C:\SVD\MagicVilla_API\MagicVilla\MagicVilla_API\bin\Debug\net7.0\Microsoft.AspNetCore.Authentication.JwtBearer.dll
