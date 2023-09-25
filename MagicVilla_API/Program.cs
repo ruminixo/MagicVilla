@@ -5,7 +5,9 @@ using MagicVilla_API.Datos;
 using MagicVilla_API.Repositorio;
 using MagicVilla_API.Repositorio.IRepositorio;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using System.Text;
@@ -19,7 +21,8 @@ builder.Services.AddControllers().AddNewtonsoftJson();
 builder.Services.AddEndpointsApiExplorer();
 // Swagger  
 
-builder.Services.AddSwaggerGen(options => {
+builder.Services.AddSwaggerGen(options =>
+{
     options.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
     {
         Description = "Ingresar Bearer [space] tuToken \r\n\r\n " +
@@ -45,6 +48,18 @@ builder.Services.AddSwaggerGen(options => {
             new List<string>()
         }
     });
+    options.SwaggerDoc("v1", new OpenApiInfo
+    { 
+        Version = "v1",
+        Title = "Magic Villa v1",
+        Description = "API para Villas"
+    });
+    options.SwaggerDoc("v2", new OpenApiInfo
+    {
+        Version = "v2",
+        Title = "Magic Villa v2",
+        Description = "API para Villas"
+    });
 });
 
 var key = builder.Configuration.GetValue<string>("ApiSettings:Secret");
@@ -54,7 +69,8 @@ builder.Services.AddAuthentication(x =>
     x.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
     x.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
 })
-    .AddJwtBearer(x => {
+    .AddJwtBearer(x =>
+    {
         x.RequireHttpsMetadata = false;
         x.SaveToken = true;
         x.TokenValidationParameters = new TokenValidationParameters
@@ -67,7 +83,7 @@ builder.Services.AddAuthentication(x =>
     });
 
 
-builder.Services.AddDbContext<ApplicationDbContext>(option => 
+builder.Services.AddDbContext<ApplicationDbContext>(option =>
 {
     option.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"));
 });
@@ -76,7 +92,17 @@ builder.Services.AddAutoMapper(typeof(MappingConfig));
 builder.Services.AddScoped<IVillaRepositorio, VillaRepositorio>();
 builder.Services.AddScoped<INumeroVillaRepositorio, NumeroVillaRepositorio>();
 builder.Services.AddScoped<IUsuarioRepositorio, UsuarioRepositorio>();
-
+builder.Services.AddApiVersioning(Options =>
+    {
+        Options.AssumeDefaultVersionWhenUnspecified=true;
+        Options.DefaultApiVersion = new ApiVersion(1, 0);
+        Options.ReportApiVersions = true;
+    });
+builder.Services.AddVersionedApiExplorer(Options =>
+{
+    Options.GroupNameFormat = "'v'VVV";
+    Options.SubstituteApiVersionInUrl = true;
+});
 var app = builder.Build();
 
 
@@ -84,6 +110,11 @@ var app = builder.Build();
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
+    app.UseSwaggerUI(options =>
+    {
+        options.SwaggerEndpoint("/swagger/v1/swagger.json", "Magic_VillaV1");
+        options.SwaggerEndpoint("/swagger/v2/swagger.json", "Magic_VillaV2");
+    });
     app.UseSwaggerUI();
 }
 

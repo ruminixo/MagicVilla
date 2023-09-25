@@ -11,10 +11,12 @@ using MagicVilla_API.Repositorio.IRepositorio;
 using System.Net;
 using Microsoft.AspNetCore.Authorization;
 
-namespace MagicVilla_API.Controllers
+namespace MagicVilla_API.Controllers.v1
 {
-    [Route("api/[controller]")]
+    [Route("api/v{version:apiVersion}/[controller]")]
     [ApiController]
+    [ApiVersion("1.0")]
+    
     public class NumeroVillaController : ControllerBase
     {
         private readonly ILogger<NumeroVillaController> _logger;
@@ -30,6 +32,7 @@ namespace MagicVilla_API.Controllers
             _mapper = mapper;
             _response= new();
         }
+        
         [HttpGet]
         [Authorize]
         [ProducesResponseType(StatusCodes.Status200OK)]
@@ -54,6 +57,9 @@ namespace MagicVilla_API.Controllers
             }
             return _response;
         }
+
+
+        
         [HttpGet("{id:int}", Name = "GetNumeroVilla")]
         [Authorize]
         [ProducesResponseType(StatusCodes.Status200OK)]
@@ -195,10 +201,5 @@ namespace MagicVilla_API.Controllers
             return Ok(_response);
 
         }
-
-
-
-
-
     }
 }
